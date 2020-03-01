@@ -4,7 +4,7 @@ namespace MonoSynth
 {
     public static class Synth
     {
-        private static Random random = new Random();
+        private static readonly Random random = new Random();
 
         public static float Sine(float frequency, float amplitude, float time)
         {
