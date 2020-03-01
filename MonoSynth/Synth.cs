@@ -4,6 +4,8 @@ namespace MonoSynth
 {
     public static class Synth
     {
+        private static Random random = new Random();
+
         public static float Sine(float frequency, float amplitude, float time)
         {
             return (float)Math.Sin(frequency * time * 2 * Math.PI) * amplitude;
@@ -22,6 +24,11 @@ namespace MonoSynth
         public static float Triangle(float frequency, float amplitude, float time)
         {
             return Math.Abs(Sawtooth(frequency, amplitude, time)) * 2.0f - 1.0f;
+        }
+
+        public static float Noise(float frequency, float amplitude, float time)
+        {
+            return (float)random.NextDouble() * amplitude;
         }
     }
 }

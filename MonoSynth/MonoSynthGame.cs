@@ -14,7 +14,6 @@ namespace MonoSynth
         private readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private DynamicSoundEffectInstance sound;
-        private Random random = new Random();
         private const int audioChannels = 2;
         private const int audioSampleRate = 44100;  //Hz => samples per sec
         private const int bytesPerSample = 2;
@@ -24,8 +23,8 @@ namespace MonoSynth
         private float audioTime = 0.0f;
         private float frequency = 220f;
         private float amplitude = 1.0f;
-        private Func<float, float, float, float>[] waveFunctions = { Synth.Sine, Synth.Sawtooth, Synth.Triangle, Synth.Square };
-        private string[] waveFunctionNames = { "Sine", "Sawtooth", "Triangle", "Square" };
+        private Func<float, float, float, float>[] waveFunctions = { Synth.Sine, Synth.Sawtooth, Synth.Triangle, Synth.Square, Synth.Noise };
+        private string[] waveFunctionNames = { "Sine", "Sawtooth", "Triangle", "Square", "Noise" };
         private int currentWaveFunc = 0;
 
         public MonoSynthGame()
