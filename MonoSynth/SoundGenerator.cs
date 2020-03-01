@@ -23,15 +23,18 @@ namespace MonoSynth
         public float Frequency { get; set; } = 220f;
         public float Amplitude { get; set; } = 1.0f;
 
+        public float Volume { get => sound.Volume; set => sound.Volume = value; }
+
         public SoundGenerator()
         {
             sound = new DynamicSoundEffectInstance(audioSampleRate, audioChannels == 2 ? AudioChannels.Stereo : AudioChannels.Mono);
         }
 
-        public void Play()
-        {
-            sound.Play();
-        }
+        public void Pause() => sound.Pause();
+        public void Play() => sound.Play();
+        public void Stop() => sound.Stop();
+        public void Resume() => sound.Resume();
+        public void Mute() => sound.Volume = 0;
 
         public void SelectNextWaveFunction()
         {

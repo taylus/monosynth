@@ -50,6 +50,8 @@ namespace MonoSynth
             if (IsKeyDown(Keys.Right)) soundGenerator.Frequency += frequencyStepOnKeypress;
             else if (IsKeyDown(Keys.Left)) soundGenerator.Frequency -= frequencyStepOnKeypress;
 
+            if (WasJustPressed(Keys.P)) soundGenerator.Pause();
+            if (WasJustPressed(Keys.R)) soundGenerator.Resume();
             if (WasJustPressed(Keys.Space))
             {
                 soundGenerator.SelectNextWaveFunction();
