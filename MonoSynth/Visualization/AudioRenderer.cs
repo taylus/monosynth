@@ -7,14 +7,14 @@ namespace MonoSynth
     /// <summary>
     /// https://www.david-gouveia.com/rendering-mathematical-functions-in-xna
     /// </summary>
-    public abstract class SampleBufferRenderer
+    public abstract class AudioRenderer
     {
         protected readonly Texture2D pixel;
         public int Width { get; set; }
         public int Height { get; set; }
         public Color Color { get; set; }
 
-        public SampleBufferRenderer(GraphicsDevice graphicsDevice, int width, int height, Color? color = null)
+        public AudioRenderer(GraphicsDevice graphicsDevice, int width, int height, Color? color = null)
         {
             pixel = new Texture2D(graphicsDevice, 1, 1);
             pixel.SetData(new[] { Color.White });

@@ -14,8 +14,9 @@ namespace MonoSynth
         private SoundGenerator soundGenerator;
         private ByteBufferRenderer byteBufferView;
         private FloatBufferRenderer floatBufferView;
+        private WaveFormRenderer waveFormView;
         private const float amplitudeStepOnKeypress = 0.005f;
-        private const float frequencyStepOnKeypress = 1.0f;
+        private const float frequencyStepOnKeypress = 0.2f;
 
         public MonoSynthGame()
         {
@@ -38,6 +39,7 @@ namespace MonoSynth
             spriteBatch = new SpriteBatch(GraphicsDevice);
             byteBufferView = new ByteBufferRenderer(GraphicsDevice, 580, 240);
             floatBufferView = new FloatBufferRenderer(GraphicsDevice, 580, 240);
+            waveFormView = new WaveFormRenderer(GraphicsDevice, 1200, 360);
             soundGenerator = new SoundGenerator();
             soundGenerator.PrintCurrentWaveFunctionName();
             soundGenerator.Play();
@@ -61,9 +63,11 @@ namespace MonoSynth
             {
                 soundGenerator.SelectNextWaveFunction();
                 soundGenerator.PrintCurrentWaveFunctionName();
+                waveFormView.WaveFunction = soundGenerator.CurrentWaveFunction;
             }
 
             soundGenerator.Update();
+            waveFormView.Update(soundGenerator.Frequency, soundGenerator.Amplitude);
             byteBufferView.Samples = soundGenerator.XnaAudioBuffer;
             floatBufferView.Samples = soundGenerator.WorkingAudioBuffer;
 
@@ -78,6 +82,7 @@ namespace MonoSynth
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             byteBufferView.Draw(spriteBatch, GraphicsDevice.Viewport.Width - byteBufferView.Width - margin, margin);
             floatBufferView.Draw(spriteBatch, margin, margin);
+            waveFormView.Draw(spriteBatch, margin, GraphicsDevice.Viewport.Height - waveFormView.Height - margin);
             spriteBatch.End();
             base.Draw(gameTime);
         }

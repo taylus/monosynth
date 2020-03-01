@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoSynth
 {
-    public class FloatBufferRenderer : SampleBufferRenderer
+    public class FloatBufferRenderer : AudioRenderer
     {
         public float[,] Samples { get; set; }
 
@@ -19,7 +19,7 @@ namespace MonoSynth
             int channels = Samples.GetLength(0);
             float horizontalStep = (float)Width / Samples.Length * channels;
             float heightScale = Height / 2;
-            for (int c = 0; c < /*channels*/1; c++)
+            for (int c = 0; c < channels; c++)
             {
                 for (int i = 0; i < Samples.GetLength(1) - 1; i++)
                 {

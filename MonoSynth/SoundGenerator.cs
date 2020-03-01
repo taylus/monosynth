@@ -13,9 +13,10 @@ namespace MonoSynth
         private const int samplesPerBuffer = 3000;
         private float audioTime = 0.0f;
 
-        private Func<float, float, float, float>[] waveFunctions = { Synth.Sine, Synth.Square, Synth.Sawtooth, Synth.Triangle, Synth.Noise };
+        private readonly Func<float, float, float, float>[] waveFunctions = { Synth.Sine, Synth.Square, Synth.Sawtooth, Synth.Triangle, Synth.Noise };
         private readonly string[] waveFunctionNames = { "Sine", "Square", "Sawtooth", "Triangle", "Noise" };
         private int currentWaveFunc = 0;
+        public Func<float, float, float, float> CurrentWaveFunction => waveFunctions[currentWaveFunc];
 
         public float[,] WorkingAudioBuffer { get; private set; } = new float[audioChannels, samplesPerBuffer];
         public byte[] XnaAudioBuffer { get; private set; } = new byte[audioChannels * samplesPerBuffer * bytesPerSample];

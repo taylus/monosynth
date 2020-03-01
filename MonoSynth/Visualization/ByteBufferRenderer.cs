@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoSynth
 {
-    public class ByteBufferRenderer : SampleBufferRenderer
+    public class ByteBufferRenderer : AudioRenderer
     {
         public byte[] Samples { get; set; }
 
