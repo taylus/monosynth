@@ -41,8 +41,8 @@ namespace MonoSynth
             floatBufferView = new FloatBufferRenderer(GraphicsDevice, 580, 240);
             waveFormView = new WaveFormRenderer(GraphicsDevice, 1200, 360);
             soundGenerator = new SoundGenerator();
-            soundGenerator.PrintCurrentWaveFunctionName();
             soundGenerator.Play();
+            UpdateWindowTitle();
         }
 
         protected override void Update(GameTime gameTime)
@@ -62,10 +62,10 @@ namespace MonoSynth
             if (WasJustPressed(Keys.Space))
             {
                 soundGenerator.SelectNextWaveFunction();
-                soundGenerator.PrintCurrentWaveFunctionName();
                 waveFormView.WaveFunction = soundGenerator.CurrentWaveFunction;
             }
 
+            UpdateWindowTitle();
             soundGenerator.Update();
             waveFormView.Update(soundGenerator.Frequency, soundGenerator.Amplitude);
             byteBufferView.Samples = soundGenerator.XnaAudioBuffer;
@@ -92,6 +92,12 @@ namespace MonoSynth
             graphics.PreferredBackBufferWidth = width;
             graphics.PreferredBackBufferHeight = height;
             graphics.ApplyChanges();
+        }
+
+        private void UpdateWindowTitle()
+        {
+            Window.Title = $"MonoSynth - {soundGenerator.CurrentWaveFunctionName}";
+            if (soundGenerator.CurrentWaveFunctionName != "Noise") Window.Title += $" @ {soundGenerator.Frequency:n0} Hz";
         }
     }
 }

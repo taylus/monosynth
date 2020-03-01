@@ -14,7 +14,7 @@ namespace MonoSynth
         private float audioTime = 0.0f;
 
         private readonly Func<float, float, float, float>[] waveFunctions = { Synth.Sine, Synth.Square, Synth.Sawtooth, Synth.Triangle, Synth.Noise };
-        private readonly string[] waveFunctionNames = { "Sine", "Square", "Sawtooth", "Triangle", "Noise" };
+        private readonly string[] waveFunctionNames = { "Sine Wave", "Square Wave", "Sawtooth Wave", "Triangle Wave", "Noise" };
         private int currentWaveFunc = 0;
         public Func<float, float, float, float> CurrentWaveFunction => waveFunctions[currentWaveFunc];
 
@@ -43,10 +43,7 @@ namespace MonoSynth
             if (currentWaveFunc >= waveFunctions.Length) currentWaveFunc = 0;
         }
 
-        public void PrintCurrentWaveFunctionName()
-        {
-            Console.WriteLine(waveFunctionNames[currentWaveFunc]);
-        }
+        public string CurrentWaveFunctionName => waveFunctionNames[currentWaveFunc];
 
         public void Update()
         {
