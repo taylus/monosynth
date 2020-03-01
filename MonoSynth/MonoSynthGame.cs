@@ -14,18 +14,21 @@ namespace MonoSynth
         private readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private DynamicSoundEffectInstance sound;
+        private SampleBufferRenderer visualization;
         private const int audioChannels = 2;
         private const int audioSampleRate = 44100;  //Hz => samples per sec
         private const int bytesPerSample = 2;
         private const int samplesPerBuffer = 3000;
-        private float[,] workingAudioBuffer = new float[audioChannels, samplesPerBuffer];
-        private byte[] xnaAudioBuffer = new byte[audioChannels * samplesPerBuffer * bytesPerSample];
+        private readonly float[,] workingAudioBuffer = new float[audioChannels, samplesPerBuffer];
+        private readonly byte[] xnaAudioBuffer = new byte[audioChannels * samplesPerBuffer * bytesPerSample];
         private float audioTime = 0.0f;
         private float frequency = 220f;
         private float amplitude = 1.0f;
-        private Func<float, float, float, float>[] waveFunctions = { Synth.Sine, Synth.Sawtooth, Synth.Triangle, Synth.Square, Synth.Noise };
-        private string[] waveFunctionNames = { "Sine", "Sawtooth", "Triangle", "Square", "Noise" };
+        private Func<float, float, float, float>[] waveFunctions = { Synth.Sine, Synth.Square, Synth.Sawtooth, Synth.Triangle, Synth.Noise };
+        private readonly string[] waveFunctionNames = { "Sine", "Square", "Sawtooth", "Triangle", "Noise" };
         private int currentWaveFunc = 0;
+        private const float amplitudeStep = 0.005f;
+        private const float frequencyStep = 1.0f;
 
         public MonoSynthGame()
         {
@@ -43,6 +46,7 @@ namespace MonoSynth
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            visualization = new SampleBufferRenderer(GraphicsDevice, GraphicsDevice.Viewport.Width - 100, GraphicsDevice.Viewport.Height - 100);
             sound = new DynamicSoundEffectInstance(audioSampleRate, audioChannels == 2 ? AudioChannels.Stereo : AudioChannels.Mono);
             sound.Play();
             Console.WriteLine(waveFunctionNames[currentWaveFunc]);
@@ -54,11 +58,11 @@ namespace MonoSynth
 
             if (IsKeyDown(Keys.Escape)) Exit();
 
-            if (IsKeyDown(Keys.Up)) amplitude += 0.01f;
-            else if (IsKeyDown(Keys.Down)) amplitude -= 0.01f;
+            if (IsKeyDown(Keys.Up)) amplitude += amplitudeStep;
+            else if (IsKeyDown(Keys.Down)) amplitude -= amplitudeStep;
 
-            if(IsKeyDown(Keys.Right)) frequency++;
-            else if (IsKeyDown(Keys.Left)) frequency--;
+            if (IsKeyDown(Keys.Right)) frequency += frequencyStep;
+            else if (IsKeyDown(Keys.Left)) frequency -= frequencyStep;
 
             if (WasJustPressed(Keys.Space))
             {
@@ -78,9 +82,10 @@ namespace MonoSynth
 
         protected override void Draw(GameTime gameTime)
         {
+            var screenCenter = new { X = GraphicsDevice.Viewport.Width / 2.0f, Y = GraphicsDevice.Viewport.Height / 2.0f };
             GraphicsDevice.Clear(new Color(32, 32, 32));
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            //TODO: draw the wave form currently being sampled
+            visualization.Draw(spriteBatch, screenCenter.X - visualization.Width / 2.0f, screenCenter.Y - visualization.Height / 2.0f);
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -96,6 +101,7 @@ namespace MonoSynth
         {
             FillWorkingAudioBuffer();
             ConvertAudioBuffer(workingAudioBuffer, xnaAudioBuffer);
+            visualization.Samples = xnaAudioBuffer;
             sound.SubmitBuffer(xnaAudioBuffer);
         }
 

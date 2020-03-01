@@ -28,7 +28,7 @@ namespace MonoSynth
 
         public static float Noise(float frequency, float amplitude, float time)
         {
-            return (float)random.NextDouble() * amplitude;
+            return (float)(random.NextDouble() - random.NextDouble()) * amplitude;
         }
     }
 }
