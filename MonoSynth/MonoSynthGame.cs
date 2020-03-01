@@ -12,27 +12,32 @@ namespace MonoSynth
         private readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private SoundGenerator soundGenerator;
-        private SampleBufferRenderer visualization;
+        private ByteBufferRenderer byteBufferView;
+        private FloatBufferRenderer floatBufferView;
         private const float amplitudeStepOnKeypress = 0.005f;
         private const float frequencyStepOnKeypress = 1.0f;
 
         public MonoSynthGame()
         {
             graphics = new GraphicsDeviceManager(this);
+            //graphics.HardwareModeSwitch = false;    //fullscreen windowed
+            //graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            Window.AllowUserResizing = true;
         }
 
         protected override void Initialize()
         {
-            SetWindowSize(640, 480);
+            SetWindowSize(1280, 720);
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            visualization = new SampleBufferRenderer(GraphicsDevice, GraphicsDevice.Viewport.Width - 100, GraphicsDevice.Viewport.Height - 100);
+            byteBufferView = new ByteBufferRenderer(GraphicsDevice, 580, 240);
+            floatBufferView = new FloatBufferRenderer(GraphicsDevice, 580, 240);
             soundGenerator = new SoundGenerator();
             soundGenerator.PrintCurrentWaveFunctionName();
             soundGenerator.Play();
@@ -59,7 +64,8 @@ namespace MonoSynth
             }
 
             soundGenerator.Update();
-            visualization.Samples = soundGenerator.XnaAudioBuffer;
+            byteBufferView.Samples = soundGenerator.XnaAudioBuffer;
+            floatBufferView.Samples = soundGenerator.WorkingAudioBuffer;
 
             PreviousKeyboardState = CurrentKeyboardState;
             base.Update(gameTime);
@@ -67,10 +73,11 @@ namespace MonoSynth
 
         protected override void Draw(GameTime gameTime)
         {
-            var screenCenter = new { X = GraphicsDevice.Viewport.Width / 2.0f, Y = GraphicsDevice.Viewport.Height / 2.0f };
+            const int margin = 40;
             GraphicsDevice.Clear(new Color(32, 32, 32));
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            visualization.Draw(spriteBatch, screenCenter.X - visualization.Width / 2.0f, screenCenter.Y - visualization.Height / 2.0f);
+            byteBufferView.Draw(spriteBatch, GraphicsDevice.Viewport.Width - byteBufferView.Width - margin, margin);
+            floatBufferView.Draw(spriteBatch, margin, margin);
             spriteBatch.End();
             base.Draw(gameTime);
         }
