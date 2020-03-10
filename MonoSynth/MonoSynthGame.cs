@@ -51,11 +51,25 @@ namespace MonoSynth
 
             if (IsKeyDown(Keys.Escape)) Exit();
 
-            if (IsKeyDown(Keys.Up)) soundGenerator.Amplitude += amplitudeStepOnKeypress;
-            else if (IsKeyDown(Keys.Down)) soundGenerator.Amplitude -= amplitudeStepOnKeypress;
+            if (IsKeyDown(Keys.Up))
+            {
+                soundGenerator.Amplitude += amplitudeStepOnKeypress;
+            }
+            else if (IsKeyDown(Keys.Down))
+            {
+                soundGenerator.Amplitude -= amplitudeStepOnKeypress;
+                if (soundGenerator.Amplitude < 0) soundGenerator.Amplitude = 0;
+            }
 
-            if (IsKeyDown(Keys.Right)) soundGenerator.Frequency += frequencyStepOnKeypress;
-            else if (IsKeyDown(Keys.Left)) soundGenerator.Frequency -= frequencyStepOnKeypress;
+            if (IsKeyDown(Keys.Right))
+            {
+                soundGenerator.Frequency += frequencyStepOnKeypress;
+            }
+            else if (IsKeyDown(Keys.Left))
+            {
+                soundGenerator.Frequency -= frequencyStepOnKeypress;
+                if (soundGenerator.Frequency < 0) soundGenerator.Frequency = 0;
+            }
 
             if (WasJustPressed(Keys.P)) soundGenerator.Pause();
             if (WasJustPressed(Keys.R)) soundGenerator.Resume();
