@@ -33,7 +33,7 @@ namespace MonoSynth
 
         private static float Pulse(float frequency, float amplitude, float time, float dutyCycle)
         {
-            return Sine(frequency, amplitude, time) >= (1 - dutyCycle) - 0.5f ? amplitude : -amplitude;
+            return Sine(frequency, 1.0f, time) >= (1 - dutyCycle) - 0.5f ? amplitude : -amplitude;
         }
 
         public static float Sawtooth(float frequency, float amplitude, float time)
