@@ -2,7 +2,7 @@
 
 namespace MonoSynth
 {
-    public static class Synth
+    public static class WaveForms
     {
         private static readonly Random random = new Random();
 
@@ -13,7 +13,27 @@ namespace MonoSynth
 
         public static float Square(float frequency, float amplitude, float time)
         {
-            return Sine(frequency, amplitude, time) >= 0 ? amplitude : -amplitude;
+            return Pulse(frequency, amplitude, time, dutyCycle: 0.5f);
+        }
+
+        public static float Pulse125(float frequency, float amplitude, float time)
+        {
+            return Pulse(frequency, amplitude, time, dutyCycle: 0.125f);
+        }
+
+        public static float Pulse25(float frequency, float amplitude, float time)
+        {
+            return Pulse(frequency, amplitude, time, dutyCycle: 0.25f);
+        }
+
+        public static float Pulse75(float frequency, float amplitude, float time)
+        {
+            return Pulse(frequency, amplitude, time, dutyCycle: 0.75f);
+        }
+
+        private static float Pulse(float frequency, float amplitude, float time, float dutyCycle)
+        {
+            return Sine(frequency, amplitude, time) >= (1 - dutyCycle) - 0.5f ? amplitude : -amplitude;
         }
 
         public static float Sawtooth(float frequency, float amplitude, float time)

@@ -13,8 +13,28 @@ namespace MonoSynth
         private const int samplesPerBuffer = 3000;
         private float audioTime = 0.0f;
 
-        private readonly Func<float, float, float, float>[] waveFunctions = { Synth.Sine, Synth.Square, Synth.Sawtooth, Synth.Triangle, Synth.Noise };
-        private readonly string[] waveFunctionNames = { "Sine Wave", "Square Wave", "Sawtooth Wave", "Triangle Wave", "Noise" };
+        private readonly Func<float, float, float, float>[] waveFunctions =
+        {
+            WaveForms.Sine,
+            WaveForms.Pulse125,
+            WaveForms.Pulse25,
+            WaveForms.Square,
+            WaveForms.Pulse75,
+            WaveForms.Sawtooth,
+            WaveForms.Triangle,
+            WaveForms.Noise
+        };
+        private readonly string[] waveFunctionNames =
+        {
+            "Sine Wave",
+            "Pulse Wave (12.5% duty cycle)",
+            "Pulse Wave (25% duty cycle)",
+            "Square Wave (pulse wave w/ 50% duty cycle)",
+            "Pulse Wave (75% duty cycle)",
+            "Sawtooth Wave",
+            "Triangle Wave",
+            "Noise"
+        };
         private int currentWaveFunc = 0;
         public Func<float, float, float, float> CurrentWaveFunction => waveFunctions[currentWaveFunc];
 
@@ -43,6 +63,12 @@ namespace MonoSynth
             if (currentWaveFunc >= waveFunctions.Length) currentWaveFunc = 0;
         }
 
+        public void SelectPreviousWaveFunction()
+        {
+            currentWaveFunc--;
+            if (currentWaveFunc < 0) currentWaveFunc = waveFunctions.Length - 1;
+        }
+
         public string CurrentWaveFunctionName => waveFunctionNames[currentWaveFunc];
 
         public void Update()
@@ -65,7 +91,7 @@ namespace MonoSynth
             for (int i = 0; i < samplesPerBuffer; i++)
             {
                 // Here is where you sample your wave function
-                WorkingAudioBuffer[0, i] = waveFunctions[currentWaveFunc](Frequency * 2, Amplitude, audioTime); // Left Channel
+                WorkingAudioBuffer[0, i] = waveFunctions[currentWaveFunc](Frequency, Amplitude, audioTime); // Left Channel
                 WorkingAudioBuffer[1, i] = waveFunctions[currentWaveFunc](Frequency, Amplitude, audioTime); // Right Channel
 
                 // Advance time passed since beginning

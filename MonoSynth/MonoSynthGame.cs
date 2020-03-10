@@ -61,7 +61,14 @@ namespace MonoSynth
             if (WasJustPressed(Keys.R)) soundGenerator.Resume();
             if (WasJustPressed(Keys.Space))
             {
-                soundGenerator.SelectNextWaveFunction();
+                if (IsKeyDown(Keys.LeftShift))
+                {
+                    soundGenerator.SelectPreviousWaveFunction();
+                }
+                else
+                {
+                    soundGenerator.SelectNextWaveFunction();
+                }
                 waveFormView.WaveFunction = soundGenerator.CurrentWaveFunction;
             }
 

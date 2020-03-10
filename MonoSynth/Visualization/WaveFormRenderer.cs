@@ -9,7 +9,7 @@ namespace MonoSynth
     {
         private const int bufferSize = 500;
         private readonly float[] samples = new float[bufferSize];
-        public Func<float, float, float, float> WaveFunction { get; set; } = Synth.Sine;
+        public Func<float, float, float, float> WaveFunction { get; set; } = WaveForms.Sine;
         public float RangeX { get; set; } = 1.0f;
         public float RangeY { get; set; } = 1.0f;
 
