@@ -11,7 +11,7 @@ namespace MonoSynth
         private const int audioSampleRate = 44100;  //Hz => samples per sec
         private const int bytesPerSample = 2;
         private const int samplesPerBuffer = 3000;
-        private float audioTime = 0.0f;
+        private double audioTime = 0;
 
         private readonly Func<float, float, float, float>[] waveFunctions =
         {
@@ -91,13 +91,13 @@ namespace MonoSynth
             for (int i = 0; i < samplesPerBuffer; i++)
             {
                 // Here is where you sample your wave function
-                WorkingAudioBuffer[0, i] = waveFunctions[currentWaveFunc](Frequency, Amplitude, audioTime); // Left Channel
-                WorkingAudioBuffer[1, i] = waveFunctions[currentWaveFunc](Frequency, Amplitude, audioTime); // Right Channel
+                WorkingAudioBuffer[0, i] = waveFunctions[currentWaveFunc](Frequency, Amplitude, (float)audioTime); // Left Channel
+                WorkingAudioBuffer[1, i] = waveFunctions[currentWaveFunc](Frequency, Amplitude, (float)audioTime); // Right Channel
 
                 // Advance time passed since beginning
                 // Since the amount of samples in a second equals the chosen SampleRate
                 // Then each sample should advance the time by 1 / SampleRate
-                audioTime += 1.0f / audioSampleRate;
+                audioTime += 1.0 / audioSampleRate;
             }
         }
 
